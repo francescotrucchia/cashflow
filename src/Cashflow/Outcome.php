@@ -12,4 +12,8 @@ class Outcome extends Flow{
   public function calcAmount($amount){
     return $amount - $this->amount;
   }
+  
+  public function getSign(){
+    return -1;
+  }
 }

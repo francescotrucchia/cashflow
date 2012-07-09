@@ -48,4 +48,10 @@ abstract class Flow implements IFlow{
     $this->setAmount($data[2]);
   }
   
+  public function getType(){
+    return get_class($this);
+  }
+  
+  abstract function getSign();
+  
 }

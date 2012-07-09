@@ -2,16 +2,38 @@
 
 namespace Cashflow;
 
-class Cashflow {
+class Cashflow{
   
   private $outcoming;
   private $incoming;
   private $entries;
+  private $amount = 0;
+  private $credit;
   
   public function __construct(){
     $this->outcoming = new Amount();
     $this->incoming = new Amount();
     $this->entries = new Amount();
+  }
+  
+  public function updateAmount($row, $sign){
+    $this->amount = round($this->amount + ($sign * $row->getAmount()), 2);
+  }
+  
+  public function getAmount(){
+    return $this->amount;
+  }
+  
+  public function setCredit($credit){
+    $this->credit = $credit;
+  }
+  
+  public function getCredit(){
+    return $this->credit;
+  }
+  
+  public function getCreditAmount(){
+    return $this->getAmount() + $this->getCredit();
   }
   
   public function addOutcoming(Outcome $outcome){
@@ -52,11 +74,12 @@ class Cashflow {
     return $this->outcoming->getAmount();
   }
 
-  public function setFrom(\DateTime $date){
-    $this->from = $date;
-  }
-  
-  public function setTo(\DateTime $to){
-    $this->to = $to;
+  public function order(){
+    $this->getEntries()->getIterator()->uasort(function($a, $b){
+      if ($a->getDate()->format('U') == $b->getDate()->format('U')) {
+        return 0;
+      }
+      return ($a->getDate()->format('U') < $b->getDate()->format('U')) ? -1 : 1;
+    });
   }
 }

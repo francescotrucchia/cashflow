@@ -16,6 +16,7 @@ class Recurrent implements IFlow{
   
   public function __construct(Flow $entry){
     $this->entry = $entry;
+    //$this->dateEnd = new \DateTime(date('Y-m-d', strtotime('+5 years')));
   }
   
   public function setInterval(\DateInterval $interval){
