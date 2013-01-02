@@ -2,7 +2,10 @@
 
 namespace Cashflow\Test;
 
-require_once __DIR__.'/../../autoload.php';
+require_once __DIR__.'/../src/Cashflow/Autoload.php';
+
+$loader = new \Cashflow\ClassLoader('Cashflow', __DIR__ . '/../src');
+$loader->register();
 
 use Cashflow\Cashflow;
 use Cashflow\Output\Formatter;
