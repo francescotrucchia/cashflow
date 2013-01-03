@@ -1,12 +1,23 @@
 <?php
+/**
+ * This file is part of the Cashflow software.
+ * (c) 2011 Francesco Trucchia <francesco@trucchia.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Cashflow;
 
+/**
+ * Cashflow class
+ * 
+ * @author Francesco Trucchia <francesco@trucchia.it>
+ */
 class Cashflow
 {
-
-    private $outcoming;
-    private $incoming;
+    private $expense;
+    private $income;
     private $entries;
     private $amount = 0;
     private $credit;
@@ -20,8 +31,8 @@ class Cashflow
 
     public function __construct(\DateTime $from, \DateTime $to, $items = array())
     {
-        $this->outcoming = new Amount();
-        $this->incoming = new Amount();
+        $this->expense = new Amount();
+        $this->income = new Amount();
         $this->entries = new Amount();
 
         $this->from = $from;
@@ -58,13 +69,13 @@ class Cashflow
 
     public function addOutcoming(Outcome $outcome)
     {
-        $this->outcoming->add($outcome);
+        $this->expense->add($outcome);
         $this->entries->add($outcome);
     }
 
     public function addIncoming(Income $income)
     {
-        $this->incoming->add($income);
+        $this->income->add($income);
         $this->entries->add($income);
     }
 
@@ -81,7 +92,7 @@ class Cashflow
     public function setCurrentBalance(Income $balance)
     {
         $this->current_balance = $balance;
-        $this->incoming->add($balance);
+        $this->income->add($balance);
     }
 
     /**
@@ -115,22 +126,32 @@ class Cashflow
 
     public function getIncoming()
     {
-        return $this->incoming->getAmount();
+        return $this->income->getAmount();
+    }
+    
+    public function getTotaleIncome()
+    {
+        return $this->income->getAmount();
     }
 
     public function getRealTimeIncoming()
     {
-        return $this->incoming->getRealTimeAmount();
+        return $this->income->getRealTimeAmount();
     }
 
     public function getOutcoming()
     {
-        return $this->outcoming->getAmount();
+        return $this->expense->getAmount();
+    }
+    
+    public function getTotalExpense()
+    {
+        return $this->expense->getAmount();
     }
 
     public function getRealTimeOutcoming()
     {
-        return $this->outcoming->getRealTimeAmount();
+        return $this->expense->getRealTimeAmount();
     }
 
     public function getFrom()

@@ -9,7 +9,7 @@ $loader->register();
 
 use Cashflow\Cashflow;
 use Cashflow\Output\Formatter;
-use Cashflow\Outcome;
+use Cashflow\Expense;
 use Cashflow\Income;
 use Cashflow\Recurrent;
 use Cashflow\CashflowFilter;
@@ -27,7 +27,7 @@ class CashflowTest extends \PHPUnit_Framework_TestCase{
     $sale = new Income();
     $sale->fromArray(array(new \DateTime(date('Y/m/d')), 'Sale', 43.22));
     
-    $purchase = new Outcome();
+    $purchase = new Expense();
     $purchase->fromArray(array(new \DateTime(date('Y/m/d')), 'Purchase', 98.34));
     
     $this->cashflow->add($sale);

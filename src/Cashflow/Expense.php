@@ -9,6 +9,7 @@
 
 namespace Cashflow;
 
-interface IFlow {
-  public function addToCashflow(Cashflow $cashflow);
+class Expense extends Outcome
+{  
+    protected $name = 'Expense';
 }
