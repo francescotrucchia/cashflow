@@ -3,8 +3,6 @@
 Cashflow library is a set of php classes useful for manage cashflow operation as income, outcome and recurrent entries.
 
 <pre><code>
-<?php
-
 require_once __DIR__.'/../src/Cashflow/Autoload.php';
 
 $loader = new \Cashflow\ClassLoader('Cashflow', __DIR__ . '/../src');
