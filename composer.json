@@ -1,5 +1,19 @@
 {
     "name": "ideato/cashflow",
+    "description": "Library to manage cashflow",
+    "homepage": "https://github.com/francescotrucchia/cashflow",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Francesco Trucchia",
+            "email": "ft@ideato.it",
+            "homepage": "http://www.ideato.it"
+        }
+    ],
+    "autoload": {
+        "psr-0": {"Cashflow": "src/"}
+    },
     "require": {
         "php": ">=5.3.0"
     }
