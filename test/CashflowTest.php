@@ -64,14 +64,14 @@ class CashflowTest extends \PHPUnit_Framework_TestCase{
     
     $this->cashflow->add($recurrent);
     
-    $filter = new CashflowFilter($this->cashflow->getRows()->getIterator(), new \DateTime(date('Y/m/1')), new \DateTime(date('Y/m/10', strtotime('+5 months'))));
+    $filter = new CashflowFilter($this->cashflow->getRows()->getIterator(), new \DateTime(date('Y/1/1')), new \DateTime(date('Y/m/10', strtotime('+5 months'))));
     
     $count = 0;
     foreach($filter as $result){
       $count++;
     }
     
-    $this->assertEquals(6, $count);
+    $this->assertEquals(5, $count);
   }
 
 }
