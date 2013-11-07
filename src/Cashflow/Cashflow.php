@@ -39,7 +39,7 @@ class Cashflow
         $this->to = $to;
         $this->items = $items;
 
-        $this->filteredEntries = new CashflowFilter($this->getRows()->getIterator(), $from, $to);
+        $this->filteredEntries = new CashflowFilter($this->getEntries()->getIterator(), $from, $to);
     }
 
     public function updateAmount($row, $sign)
@@ -104,7 +104,7 @@ class Cashflow
         return $this->getEntries();
     }
 
-    private function getFilteredRows()
+    public function getFilteredEntries()
     {
         return $this->filteredEntries;
     }

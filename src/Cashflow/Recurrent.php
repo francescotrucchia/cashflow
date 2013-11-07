@@ -98,12 +98,11 @@ class Recurrent implements IFlow
     public function addToCashflow(Cashflow $cashflow)
     {
         $entry = $this->entry;
-        $entry->addToCashflow($cashflow);
-
+        
         while ($entry->getDate()->format('U') <= $this->dateEnd->format('U')) {
+            $entry->addToCashflow($cashflow);
             $entry = clone $entry;
             $entry->getDate()->add($this->interval);
-            $entry->addToCashflow($cashflow);
         }
     }
 

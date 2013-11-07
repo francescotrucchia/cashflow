@@ -19,7 +19,7 @@ class CashflowTest extends \PHPUnit_Framework_TestCase{
   private $cashflow;
   
   public function setup(){
-    $this->cashflow = new Cashflow(new \DateTime(date('Y/1/1')), new \DateTime(date('Y/12/30')));
+    $this->cashflow = new Cashflow(new \DateTime(date('Y/1/1')), new \DateTime(date('Y/12/30', strtotime('+1 year'))));
   }
   
   public function testInstance(){
@@ -45,7 +45,7 @@ class CashflowTest extends \PHPUnit_Framework_TestCase{
     
     $recurrent = new Recurrent($income);
     $recurrent->setInterval(new \DateInterval('P1M'));
-    $recurrent->setDateEnd(new \DateTime(date('Y/1/10', strtotime('+1 years'))));
+    $recurrent->setDateEnd(new \DateTime(date('Y/12/30')));
     
     $this->cashflow->add($recurrent);
     
@@ -54,24 +54,24 @@ class CashflowTest extends \PHPUnit_Framework_TestCase{
   
   public function testPeriod(){
     
+    $cashflow = new Cashflow(new \DateTime(date('Y/1/1')), new \DateTime(date('Y/5/31')));
+    
     $income = new Income();
     $income->setAmount(100);
-    $income->setDate(new \DateTime(date('Y/m/10')));
+    $income->setDate(new \DateTime(date('Y/1/10')));
     
     $recurrent = new Recurrent($income);
-    $recurrent->setInterval(new \DateInterval('P30D'));
-    $recurrent->setDateEnd(new \DateTime(date('Y/m/10', strtotime('+10 months'))));
+    $recurrent->setInterval(new \DateInterval('P1M'));
+    $recurrent->setDateEnd(new \DateTime(date('Y/12/30')));
     
-    $this->cashflow->add($recurrent);
+    $cashflow->add($recurrent);
     
-    $filter = new CashflowFilter($this->cashflow->getRows()->getIterator(), new \DateTime(date('Y/1/1')), new \DateTime(date('Y/m/10', strtotime('+5 months'))));
     
     $count = 0;
-    foreach($filter as $result){
+    foreach($cashflow->getFilteredEntries() as $result){
       $count++;
     }
     
     $this->assertEquals(5, $count);
   }
-
 }
