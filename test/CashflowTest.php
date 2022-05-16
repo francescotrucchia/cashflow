@@ -49,7 +49,7 @@ class CashflowTest extends TestCase
 
         $this->cashflow->add($recurrent);
 
-        $this->assertEquals(12, $this->cashflow->getRows()->count());
+        $this->assertEquals(12, $this->cashflow->getEntries()->count());
     }
 
     public function testPeriod(): void
