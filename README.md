@@ -35,8 +35,8 @@ foreach($cashflow->getRows() as $row){
         $mask, 
         $row->getDate()->format('Y-m-d'), 
         $row->getName(), 
-        money_format('%.2n', $row->getSign()*$row->getAmount()), 
-        money_format('%.2n', $cashflow->getAmount())
+        $row->getSign()*$row->getAmount(), 
+        $cashflow->getAmount()
     );
 }
 
