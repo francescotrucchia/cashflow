@@ -1,8 +1,10 @@
-# Cashflow Library [![Build Status](https://travis-ci.org/francescotrucchia/cashflow.png?branch=master)](http://travis-ci.org/francescotrucchia/cashflow)
+# Cashflow Library
 
 Cashflow library is a set of php classes useful for manage cashflow operation as income, outcome and recurrent entries.
 
-<pre><code>
+``` php
+<?php
+
 require_once __DIR__.'/../src/Cashflow/Autoload.php';
 
 $loader = new \Cashflow\ClassLoader('Cashflow', __DIR__ . '/../src');
@@ -12,12 +14,12 @@ use Cashflow\Cashflow;
 use Cashflow\Outcome;
 use Cashflow\Income;
 
-$entries = array(
-    array(new \Cashflow\Income(),  new \DateTime(date('Y/06/10')), 'Balance', 1000),
-    array(new \Cashflow\Expense(), new \DateTime(date('Y/06/11')), 'Credit card', 100),
-    array(new \Cashflow\Recurrent(new \Cashflow\Income()),  new \DateTime(date('Y/1/10')), 'Salary', 1500, new \DateInterval('P1M'), new \DateTime(date('Y/12/31'))),
-    array(new \Cashflow\Recurrent(new \Cashflow\Expense()),  new \DateTime(date('Y/1/12')), 'Rent', 500, new \DateInterval('P1M'), new \DateTime(date('Y/12/31'))),
-);
+$entries = [
+    [new \Cashflow\Income(),  new \DateTime(date('Y/06/10')), 'Balance', 1000],
+    [new \Cashflow\Expense(), new \DateTime(date('Y/06/11')), 'Credit card', 100],
+    [new \Cashflow\Recurrent(new \Cashflow\Income()),  new \DateTime(date('Y/1/10')), 'Salary', 1500, new \DateInterval('P1M'), new \DateTime(date('Y/12/31'))],
+    [new \Cashflow\Recurrent(new \Cashflow\Expense()),  new \DateTime(date('Y/1/12')), 'Rent', 500, new \DateInterval('P1M'), new \DateTime(date('Y/12/31'))],
+];
 
 $cashflow = new Cashflow(new \DateTime(date('Y/1/1')), new \DateTime(date('Y/12/30')));
 $cashflow->import($entries);
@@ -45,4 +47,4 @@ $output .= PHP_EOL.
 
 echo $output;
 
-</code></pre>
+```
