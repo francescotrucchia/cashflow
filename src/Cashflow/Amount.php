@@ -10,13 +10,16 @@
 
 namespace Cashflow;
 
+use Money\Money;
+
 class Amount extends \ArrayObject
 {
-    private float $amount = 0;
+    private Money $amount;
 
     public function __construct($array = [])
     {
         parent::__construct($array, 0, AmountIterator::class);
+        $this->amount = Money::EUR(0);
     }
 
     public function add(Flow $flow): void
@@ -25,12 +28,12 @@ class Amount extends \ArrayObject
         $this->amount = $flow->calcAmount($this->amount);
     }
 
-    public function getAmount(): float
+    public function getAmount(): Money
     {
         return $this->amount;
     }
 
-    public function getRealTimeAmount(): float
+    public function getRealTimeAmount(): ?Money
     {
         return $this->getIterator()->getAmount();
     }

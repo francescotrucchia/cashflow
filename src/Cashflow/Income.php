@@ -10,6 +10,9 @@
 
 namespace Cashflow;
 
+
+use Money\Money;
+
 class Income extends Flow
 {
     protected string $name = 'Income';
@@ -19,9 +22,9 @@ class Income extends Flow
         $cashflow->addIncoming($this);
     }
 
-    public function calcAmount($amount): float
+    public function calcAmount(Money $amount): Money
     {
-        return $amount + $this->amount;
+        return $amount->add($this->amount);
     }
 
     public function getSign(): int

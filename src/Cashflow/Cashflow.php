@@ -10,6 +10,8 @@
 
 namespace Cashflow;
 
+use Money\Money;
+
 /**
  * Cashflow class
  *
@@ -17,160 +19,158 @@ namespace Cashflow;
  */
 class Cashflow
 {
-    private $expense;
-    private $income;
-    private $entries;
-    private $amount = 0;
-    private $credit;
-    private $from;
-    private $to;
-    private $current_balance;
-    private $items;
-    private $min;
-    private $max;
-    private $errors = array();
+    private Amount $expense;
+    private Amount $income;
+    private Amount $entries;
+    private Money $amount;
+    private Money $credit;
+    private \DateTime $from;
+    private \DateTime $to;
+    private Income $currentBalance;
+    private array $items;
+    private Flow $min;
+    private Flow $max;
+    private array $errors = [];
+    private CashflowFilter $filteredEntries;
 
-    public function __construct(\DateTime $from, \DateTime $to, $items = array())
+    public function __construct(\DateTime $from, \DateTime $to, array $items = [])
     {
         $this->expense = new Amount();
         $this->income = new Amount();
         $this->entries = new Amount();
 
+        $this->amount = Money::EUR(0);
+        $this->credit = Money::EUR(0);
+
         $this->from = $from;
         $this->to = $to;
         $this->items = $items;
 
+        $this->min = new Income();
+        $this->max = new Income();
+
         $this->filteredEntries = new CashflowFilter($this->getEntries()->getIterator(), $from, $to);
     }
 
-    public function updateAmount($row, $sign)
+    public function updateAmount(Flow $row, int $sign): void
     {
-        $this->amount = round($this->amount + ($sign * $row->getAmount()), 2);
+        $this->amount = $this->amount->add($row->getAmount()->multiply($sign));
     }
 
-    public function getAmount()
+    public function getAmount(): Money
     {
         return $this->amount;
     }
 
-    public function setCredit($credit)
+    public function setCredit(Money $credit): void
     {
         $this->credit = $credit;
     }
 
-    public function getCredit()
+    public function getCredit(): Money
     {
         return $this->credit;
     }
 
-    public function getCreditAmount()
+    public function getCreditAmount(): Money
     {
-        return $this->getAmount() + $this->getCredit();
+        return $this->getAmount()->add($this->getCredit());
     }
 
-    public function addOutcoming(Outcome $outcome)
+    public function addOutcoming(Outcome $outcome): void
     {
         $this->expense->add($outcome);
         $this->entries->add($outcome);
     }
 
-    public function addIncoming(Income $income)
+    public function addIncoming(Income $income): void
     {
         $this->income->add($income);
         $this->entries->add($income);
     }
 
-    public function add(IFlow $flow)
+    public function add(IFlow $flow): void
     {
         $flow->addToCashflow($this);
     }
 
-    public function getCurrentBalance()
+    public function getCurrentBalance(): Income
     {
-        return $this->current_balance;
+        return $this->currentBalance;
     }
 
-    public function setCurrentBalance(Income $balance)
+    public function setCurrentBalance(Income $balance): void
     {
-        $this->current_balance = $balance;
+        $this->currentBalance = $balance;
         $this->income->add($balance);
     }
 
-    /**
-     * @deprecated use getEntries
-     * @return     Amount
-     */
-    public function getRows()
-    {
-        return $this->getEntries();
-    }
-
-    public function getFilteredEntries()
+    public function getFilteredEntries(): \FilterIterator
     {
         return $this->filteredEntries;
     }
 
-    public function getEntries()
+    public function getEntries(): Amount
     {
         return $this->entries;
     }
 
-    public function getBalance()
+    public function getBalance(): Money
     {
-        return round($this->entries->getAmount(), 2);
+        return $this->entries->getAmount();
     }
 
-    public function getRealTimeBalance()
+    public function getRealTimeBalance(): Money
     {
-        return round($this->entries->getRealTimeAmount(), 2);
+        return $this->entries->getRealTimeAmount();
     }
 
-    public function getIncoming()
-    {
-        return $this->income->getAmount();
-    }
-
-    public function getTotaleIncome()
+    public function getIncoming(): Money
     {
         return $this->income->getAmount();
     }
 
-    public function getRealTimeIncoming()
+    public function getTotaleIncome(): Money
+    {
+        return $this->income->getAmount();
+    }
+
+    public function getRealTimeIncoming(): Money
     {
         return $this->income->getRealTimeAmount();
     }
 
-    public function getOutcoming()
+    public function getOutcoming(): Money
     {
         return $this->expense->getAmount();
     }
 
-    public function getTotalExpense()
+    public function getTotalExpense(): Money
     {
         return $this->expense->getAmount();
     }
 
-    public function getRealTimeOutcoming()
+    public function getRealTimeOutcoming(): Money
     {
         return $this->expense->getRealTimeAmount();
     }
 
-    public function getFrom()
+    public function getFrom(): \DateTime
     {
         return $this->from;
     }
 
-    public function getTo()
+    public function getTo(): \DateTime
     {
         return $this->to;
     }
 
-    public function getItems()
+    public function getItems(): array
     {
         return $this->items;
     }
 
-    public function order()
+    public function order(): void
     {
         $this->getEntries()->getIterator()->uasort(
             function ($a, $b) {
@@ -182,9 +182,10 @@ class Cashflow
         );
     }
 
-    public function import(array $entries)
+    public function import(array $entries): void
     {
         foreach ($entries as $entry) {
+            /** @var Flow $flow */
             $flow = $entry[0];
             array_shift($entry);
             $flow->fromArray($entry);
@@ -197,29 +198,29 @@ class Cashflow
         $this->errors[] = $error;
     }
 
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
 
-    public function getMin()
+    public function getMin(): Flow
     {
         return $this->min;
     }
 
-    public function getMax()
+    public function getMax(): Flow
     {
         return $this->max;
     }
 
-    public function setMin($entry)
+    public function setMin(Flow $entry): void
     {
         if (!$this->min || $this->min->getAmount() > $entry->getAmount()) {
             $this->min = $entry;
         }
     }
 
-    public function setMax($entry)
+    public function setMax(Flow $entry): void
     {
         if (!$this->max || $this->max->getAmount() < $entry->getAmount()) {
             $this->max = $entry;
