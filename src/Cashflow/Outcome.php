@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cashflow software.
  * (c) 2011 Francesco Trucchia <francesco@trucchia.it>
@@ -9,20 +10,22 @@
 
 namespace Cashflow;
 
-class Outcome extends Flow {
+class Outcome extends Flow
+{
+    protected string $name = 'Outcome';
 
-    protected $name = 'Outcome';
-    
-    public function add(Cashflow $cashflow) {
+    public function add(Cashflow $cashflow): void
+    {
         $cashflow->addOutcoming($this);
     }
-    
-    public function calcAmount($amount) {
+
+    public function calcAmount($amount): float
+    {
         return $amount - $this->amount;
     }
-    
-    public function getSign() {
+
+    public function getSign(): int
+    {
         return -1;
     }
-
 }

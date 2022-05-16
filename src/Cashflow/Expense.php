@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cashflow software.
  * (c) 2011 Francesco Trucchia <francesco@trucchia.it>
@@ -10,6 +11,6 @@
 namespace Cashflow;
 
 class Expense extends Outcome
-{  
-    protected $name = 'Expense';
+{
+    protected string $name = 'Expense';
 }

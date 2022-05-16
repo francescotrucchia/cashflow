@@ -1,0 +1,1 @@
+{"version":1,"defects":{"Cashflow\\Test\\CashflowTest::testInstance":4,"Cashflow\\Test\\CashflowTest::testRecurrent":4,"Cashflow\\Test\\CashflowTest::testPeriod":4},"times":{"Cashflow\\Test\\CashflowTest::testInstance":0.086,"Cashflow\\Test\\CashflowTest::testRecurrent":0.003,"Cashflow\\Test\\CashflowTest::testPeriod":0}}

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cashflow software.
  * (c) 2011 Francesco Trucchia <francesco@trucchia.it>
@@ -9,24 +10,28 @@
 
 namespace Cashflow;
 
-class Amount extends \ArrayObject{
-  private $amount = 0;
-  
-  public function __construct($array = array()) {
-    parent::__construct($array, 0, 'Cashflow\AmountIterator');
-    
-  }
-  
-  public function add(Flow $flow){
-    $this[] = $flow;
-    $this->amount = $flow->calcAmount($this->amount);
-  }
-  
-  public function getAmount(){
-    return $this->amount;
-  }
-  
-  public function getRealTimeAmount(){
-    return $this->getIterator()->getAmount();
-  }
+class Amount extends \ArrayObject
+{
+    private float $amount = 0;
+
+    public function __construct($array = [])
+    {
+        parent::__construct($array, 0, AmountIterator::class);
+    }
+
+    public function add(Flow $flow): void
+    {
+        $this[] = $flow;
+        $this->amount = $flow->calcAmount($this->amount);
+    }
+
+    public function getAmount(): float
+    {
+        return $this->amount;
+    }
+
+    public function getRealTimeAmount(): float
+    {
+        return $this->getIterator()->getAmount();
+    }
 }

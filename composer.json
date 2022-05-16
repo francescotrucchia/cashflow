@@ -12,9 +12,10 @@
         }
     ],
     "autoload": {
-        "psr-0": {"Cashflow": "src/"}
+        "psr-4": {"Cashflow\\": "src/Cashflow"}
     },
     "require": {
-        "php": ">=8.0.0"
+        "php": ">=8.0.0",
+        "phpunit/phpunit": "^9.5"
     }
 }

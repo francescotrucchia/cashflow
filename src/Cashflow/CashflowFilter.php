@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cashflow software.
  * (c) 2011 Francesco Trucchia <francesco@trucchia.it>
@@ -9,26 +10,29 @@
 
 namespace Cashflow;
 
-class CashflowFilter extends \FilterIterator{
-  
-  private $from;
-  private $to;
-  
-  public function __construct(\Iterator $iterator , \DateTime $from, \DateTime $to)
-  {
-      parent::__construct($iterator);
-      $this->from = $from;
-      $this->to = $to;
-  }
+class CashflowFilter extends \FilterIterator
+{
+    private \DateTime $from;
+    private \DateTime $to;
 
-  public function accept()
-  {
-      $entry = $this->getInnerIterator()->current();
-      
-      if($entry->getDate()->format('U') >= $this->from->format('U') && $entry->getDate()->format('U') <= $this->to->format('U')) {
-          return true;
-      }        
-      return false;
-  }
+    public function __construct(\Iterator $iterator, \DateTime $from, \DateTime $to)
+    {
+        parent::__construct($iterator);
+        $this->from = $from;
+        $this->to = $to;
+    }
+
+    public function accept(): bool
+    {
+        $entry = $this->getInnerIterator()->current();
+
+        if (
+            $entry->getDate()->format('U') >= $this->from->format('U') &&
+            $entry->getDate()->format('U') <= $this->to->format('U')
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 }
-

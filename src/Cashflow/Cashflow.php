@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cashflow software.
  * (c) 2011 Francesco Trucchia <francesco@trucchia.it>
@@ -11,7 +12,7 @@ namespace Cashflow;
 
 /**
  * Cashflow class
- * 
+ *
  * @author Francesco Trucchia <francesco@trucchia.it>
  */
 class Cashflow
@@ -96,8 +97,8 @@ class Cashflow
     }
 
     /**
-     * @deprecated
-     * @return Amount 
+     * @deprecated use getEntries
+     * @return     Amount
      */
     public function getRows()
     {
@@ -128,7 +129,7 @@ class Cashflow
     {
         return $this->income->getAmount();
     }
-    
+
     public function getTotaleIncome()
     {
         return $this->income->getAmount();
@@ -143,7 +144,7 @@ class Cashflow
     {
         return $this->expense->getAmount();
     }
-    
+
     public function getTotalExpense()
     {
         return $this->expense->getAmount();
@@ -171,12 +172,14 @@ class Cashflow
 
     public function order()
     {
-        $this->getEntries()->getIterator()->uasort(function($a, $b) {
-                    if ($a->getDate()->format('U') == $b->getDate()->format('U')) {
-                        return 0;
-                    }
+        $this->getEntries()->getIterator()->uasort(
+            function ($a, $b) {
+                if ($a->getDate()->format('U') == $b->getDate()->format('U')) {
+                    return 0;
+                }
                     return ($a->getDate()->format('U') < $b->getDate()->format('U')) ? -1 : 1;
-                });
+            }
+        );
     }
 
     public function import(array $entries)
@@ -222,5 +225,4 @@ class Cashflow
             $this->max = $entry;
         }
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cashflow software.
  * (c) 2011 Francesco Trucchia <francesco@trucchia.it>
@@ -9,6 +10,7 @@
 
 namespace Cashflow;
 
-interface IFlow {
-  public function addToCashflow(Cashflow $cashflow);
+interface IFlow
+{
+    public function addToCashflow(Cashflow $cashflow): void;
 }

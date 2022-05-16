@@ -1,43 +1,41 @@
 <?php
 
-require_once __DIR__.'/../src/Cashflow/Autoload.php';
-
-$loader = new \Cashflow\ClassLoader('Cashflow', __DIR__ . '/../src');
-$loader->register();
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Cashflow\Cashflow;
-use Cashflow\Outcome;
+use Cashflow\Expense;
 use Cashflow\Income;
+use Cashflow\Recurrent;
 
 $entries = array(
-    //array(new \Cashflow\Income(),  new \DateTime(date('Y/06/10')), 'Balance', 1000),
-    //array(new \Cashflow\Expense(), new \DateTime(date('Y/06/11')), 'Credit card', 100),
-    array(new \Cashflow\Recurrent(new \Cashflow\Income()),  new \DateTime(date('Y/1/10')), 'Salary', 1500, new \DateInterval('P1M'), new \DateTime(date('Y/12/31'))),
-    array(new \Cashflow\Recurrent(new \Cashflow\Expense()),  new \DateTime(date('Y/1/12')), 'Rent', 500, new \DateInterval('P1M'), new \DateTime(date('Y/12/31'))),
+    array(new Income(), new \DateTime(date('Y/06/10')), 'Balance', 1000),
+    array(new Expense(), new \DateTime(date('Y/06/11')), 'Credit card', 100),
+    array(new Recurrent(new Income()), new \DateTime(date('Y/1/10')), 'Salary', 1500, new \DateInterval('P1M'), new \DateTime(date('Y/12/31', strtotime('+1 years')))),
+    array(new Recurrent(new Expense()), new \DateTime(date('Y/1/12')), 'Rent', 500, new \DateInterval('P1M'), new \DateTime(date('Y/12/31', strtotime('+1 years')))),
 );
 
-$cashflow = new Cashflow(new \DateTime(date('Y/1/1')), new \DateTime(date('2014/03/30')));
+$cashflow = new Cashflow(new \DateTime(date('Y/1/1')), new \DateTime(date('Y/1/1', strtotime('+1 years'))));
 $cashflow->import($entries);
 $cashflow->order();
-    
+
 $mask = "|%-10.10s |%-30.30s |%15s |%15s |\n";
 
 $output = sprintf($mask, 'Date', 'Name', 'Flow', 'Balance');
 
-foreach($cashflow->getRows() as $row){
+foreach ($cashflow->getEntries() as $row) {
     $cashflow->updateAmount($row, $row->getSign());
     $output .= sprintf(
-        $mask, 
-        $row->getDate()->format('Y-m-d'), 
-        $row->getName(), 
-        money_format('%.2n', $row->getSign()*$row->getAmount()), 
-        money_format('%.2n', $cashflow->getAmount())
+        $mask,
+        $row->getDate()->format('Y-m-d'),
+        $row->getName(),
+        $row->getSign() * $row->getAmount(),
+        $cashflow->getAmount()
     );
 }
 
-$output .= PHP_EOL.
-  sprintf('Total income: %s'.PHP_EOL, money_format('%.2n', $cashflow->getTotaleIncome())).
-  sprintf('Total expense: %s'.PHP_EOL, money_format('%.2n', $cashflow->getTotalExpense())).
-  sprintf('Profit: %s'.PHP_EOL, money_format('%.2n', $cashflow->getBalance()));
+$output .= PHP_EOL .
+    sprintf('Total income: %s' . PHP_EOL, $cashflow->getTotaleIncome()) .
+    sprintf('Total expense: %s' . PHP_EOL, $cashflow->getTotalExpense()) .
+    sprintf('Profit: %s' . PHP_EOL, $cashflow->getBalance());
 
 echo $output;

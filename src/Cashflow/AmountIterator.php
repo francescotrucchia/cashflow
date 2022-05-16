@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the Cashflow software.
  * (c) 2011 Francesco Trucchia <francesco@trucchia.it>
@@ -9,18 +10,20 @@
 
 namespace Cashflow;
 
-class AmountIterator extends \ArrayIterator{
-  
-  private $amount = 0;
-  
-  public function current(){
-    $flow = parent::current();
-    $this->amount = $flow->calcAmount($this->amount);
-    
-    return $flow;
-  }
-  
-  public function getAmount(){
-    return $this->amount;
-  }
+class AmountIterator extends \ArrayIterator
+{
+    private float $amount = 0;
+
+    public function current(): mixed
+    {
+        $flow = parent::current();
+        $this->amount = $flow->calcAmount($this->amount);
+
+        return $flow;
+    }
+
+    public function getAmount(): float
+    {
+        return $this->amount;
+    }
 }
