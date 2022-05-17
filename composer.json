@@ -17,6 +17,6 @@
     "require": {
         "php": ">=8.0.0",
         "phpunit/phpunit": "^9.5",
-        "moneyphp/money": "dev-master"
+        "moneyphp/money": "4.0.*"
     }
 }
