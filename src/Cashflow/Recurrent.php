@@ -10,6 +10,8 @@
 
 namespace Cashflow;
 
+use Money\Money;
+
 class Recurrent implements IFlow
 {
     private $interval;
@@ -56,7 +58,7 @@ class Recurrent implements IFlow
         $this->entry->setDate($date);
     }
 
-    public function setAmount(float $amount): void
+    public function setAmount(Money $amount): void
     {
         $this->entry->setAmount($amount);
     }

@@ -6,6 +6,7 @@ use Cashflow\Cashflow;
 use Cashflow\Expense;
 use Cashflow\Income;
 use Cashflow\Recurrent;
+use Money\Money;
 use PHPUnit\Framework\TestCase;
 
 class CashflowTest extends TestCase
@@ -24,24 +25,27 @@ class CashflowTest extends TestCase
     {
 
         $sale = new Income();
-        $sale->fromArray(array(new \DateTime(date('Y/m/d')), 'Sale', 43.22));
+        $sale->fromArray(array(new \DateTime(date('Y/m/d')), 'Sale', Money::EUR(4322)));
 
         $purchase = new Expense();
-        $purchase->fromArray(array(new \DateTime(date('Y/m/d')), 'Purchase', 98.34));
+        $purchase->fromArray(array(new \DateTime(date('Y/m/d')), 'Purchase', Money::EUR(9834)));
 
         $this->cashflow->add($sale);
         $this->cashflow->add($purchase);
 
-        $this->assertEquals(-55.12, $this->cashflow->getBalance());
-        $this->assertEquals(43.22, $this->cashflow->getIncoming());
-        $this->assertEquals(-98.34, $this->cashflow->getOutcoming());
+        $this->assertEquals(-5512, $this->cashflow->getBalance()->getAmount());
+        $this->assertEquals(4322, $this->cashflow->getIncoming()->getAmount());
+        $this->assertEquals(-9834, $this->cashflow->getOutcoming()->getAmount());
+        $this->assertEquals(4322, $this->cashflow->getRealTimeIncoming()->getAmount());
+        $this->assertEquals(-9834, $this->cashflow->getRealTimeOutcoming()->getAmount());
+        $this->assertEquals(4322, $this->cashflow->getRealTimeBalance()->getAmount());
     }
 
     public function testRecurrent(): void
     {
 
         $income = new Income();
-        $income->fromArray(array(new \DateTime(date('Y/1/10')), 'Income', 100));
+        $income->fromArray(array(new \DateTime(date('Y/1/10')), 'Income', Money::EUR(10000)));
 
         $recurrent = new Recurrent($income);
         $recurrent->setInterval(new \DateInterval('P1M'));
@@ -49,7 +53,7 @@ class CashflowTest extends TestCase
 
         $this->cashflow->add($recurrent);
 
-        $this->assertEquals(12, $this->cashflow->getRows()->count());
+        $this->assertEquals(12, $this->cashflow->getEntries()->count());
     }
 
     public function testPeriod(): void
@@ -58,7 +62,7 @@ class CashflowTest extends TestCase
         $cashflow = new Cashflow(new \DateTime(date('Y/1/1')), new \DateTime(date('Y/5/31')));
 
         $income = new Income();
-        $income->setAmount(100);
+        $income->setAmount(Money::EUR(10000));
         $income->setDate(new \DateTime(date('Y/1/10')));
 
         $recurrent = new Recurrent($income);

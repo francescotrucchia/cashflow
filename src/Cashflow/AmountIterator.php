@@ -10,20 +10,32 @@
 
 namespace Cashflow;
 
+use Money\Money;
+
 class AmountIterator extends \ArrayIterator
 {
-    private float $amount = 0;
+    private Money $amount;
+
+    public function __construct($array = [], $flags = 0)
+    {
+        $this->amount = Money::EUR(0);
+        parent::__construct($array, $flags);
+    }
 
     public function current(): mixed
     {
+        $this->amount = Money::EUR(0);
+
+        /** @var Flow $flow */
         $flow = parent::current();
         $this->amount = $flow->calcAmount($this->amount);
 
         return $flow;
     }
 
-    public function getAmount(): float
+    public function getAmount(): Money
     {
+        $this->current();
         return $this->amount;
     }
 }

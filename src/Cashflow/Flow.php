@@ -10,16 +10,22 @@
 
 namespace Cashflow;
 
+use Money\Currencies\ISOCurrencies;
+use Money\Currency;
+use Money\Money;
+use Money\Parser\DecimalMoneyParser;
+
 abstract class Flow implements IFlow
 {
     protected string $id;
     protected string $name;
-    protected float $amount;
+    protected Money $amount;
     protected \DateTime $date;
 
     public function __construct()
     {
         $this->date = new \DateTime();
+        $this->amount = Money::EUR(0);
     }
 
     public function __toString(): string
@@ -47,12 +53,12 @@ abstract class Flow implements IFlow
         return $this->name;
     }
 
-    public function setAmount(float $amount): void
+    public function setAmount(Money $amount): void
     {
         $this->amount = $amount;
     }
 
-    public function getAmount(): float
+    public function getAmount(): Money
     {
         return $this->amount;
     }
@@ -133,4 +139,6 @@ abstract class Flow implements IFlow
     abstract public function getSign(): int;
 
     abstract protected function add(Cashflow $cashflow): void;
+
+    abstract public function calcAmount(Money $amount): Money;
 }
